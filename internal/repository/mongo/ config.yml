@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: 'mongo-debil'
+    ports:
+      - 8081:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: rextail
+      MONGO_INITDB_ROOT_PASSWORD: s3cr7tp4ss
+      MONGO_INITDB_ROOT_URL: mongodb://rextail:s3cr7tp4ss@mongo:27017/" >> internal/storage/mongo/config.yml
