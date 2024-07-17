@@ -11,17 +11,17 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type RequestRepository struct {
+type UserVotesRepository struct {
 	coll *mongo.Collection
 }
 
-func NewRequestRepository(c *mongo.Client) *RequestRepository {
-	return &RequestRepository{
+func NewUserVotesRepository(c *mongo.Client) *UserVotesRepository {
+	return &UserVotesRepository{
 		coll: c.Database("poll-service").Collection("requests"),
 	}
 }
 
-func (r *RequestRepository) SaveRequest(ctx context.Context, req entities.Request) error {
+func (r *UserVotesRepository) Save(ctx context.Context, req entities.Request) error {
 	op := `repository.mongo.request.Save`
 
 	filter := bson.M{"remote_addr": req.RemoteAddr, "request.pollid": req.Request.PollID}
@@ -41,7 +41,7 @@ func (r *RequestRepository) SaveRequest(ctx context.Context, req entities.Reques
 	return nil
 }
 
-func (r *RequestRepository) ClearByPollID(ctx context.Context, poll entities.DeleteRequest) error {
+func (r *UserVotesRepository) ClearByPollID(ctx context.Context, poll entities.DeleteRequest) error {
 	op := `repository.mongo.request.ClearByPollID`
 
 	if err := r.coll.Drop(ctx); err != nil {

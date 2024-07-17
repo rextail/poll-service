@@ -19,11 +19,11 @@ type Poller interface {
 	Poll(ctx context.Context, pollReq entities.PollRequest) error
 }
 
-type RequestSaver interface {
-	SaveRequest(ctx context.Context, voteRequest entities.Request) error
+type VoteSaver interface {
+	Save(ctx context.Context, voteRequest entities.Request) error
 }
 
-func New(log *slog.Logger, poller Poller, saver RequestSaver) http.HandlerFunc {
+func New(log *slog.Logger, poller Poller, saver VoteSaver) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		op := `http.handlers.url.poll.New`
 
@@ -63,7 +63,7 @@ func New(log *slog.Logger, poller Poller, saver RequestSaver) http.HandlerFunc {
 
 		voteRequest.RemoteAddr = r.RemoteAddr
 
-		if err := saver.SaveRequest(ctx, voteRequest); err != nil {
+		if err := saver.Save(ctx, voteRequest); err != nil {
 			log.Error("User's vote can't be taken into account", slogkz.Err(err))
 
 			render.JSON(w, r, response.Error(err.Error()))

@@ -14,19 +14,19 @@ type PollRepository interface {
 	Result(ctx context.Context, req entities.GetResultRequest) (entities.Poll, error)
 }
 
-type RequestRepository interface {
-	SaveRequest(ctx context.Context, req entities.Request) error
+type UserVotesRepository interface {
+	Save(ctx context.Context, req entities.Request) error
 	ClearByPollID(ctx context.Context, voteRequest entities.DeleteRequest) error
 }
 
 type Repositories struct {
 	PollRepository
-	RequestRepository
+	UserVotesRepository
 }
 
 func New(client *mongo.Client) *Repositories {
 	return &Repositories{
-		PollRepository:    mongo.NewPollRepository(client.Client),
-		RequestRepository: mongo.NewRequestRepository(client.Client),
+		PollRepository:      mongo.NewPollRepository(client.Client),
+		UserVotesRepository: mongo.NewUserVotesRepository(client.Client),
 	}
 }
